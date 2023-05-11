@@ -5,7 +5,7 @@ Require Import Ensembles.
 
 Require Import general_export.
 
-Require Import DiSL_calc.
+Require Import G4iSLT_calc.
 
 (* We define here the axioms. *)
 

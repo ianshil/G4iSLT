@@ -3,7 +3,7 @@ Require Import Lia.
 Require Import Ensembles.
 Require Import Init.Wf.
 
-Require Import DiSL_calc.
+Require Import G4iSLT_calc.
 
 Definition inverse {X : Type} (R : X -> X -> Prop) (x y : X) : Prop := R y x.
 
@@ -61,6 +61,3 @@ Definition valid_form φ := forall M, mforces M φ.
 
 Definition loc_conseq (Γ : Ensemble MPropF) (φ : MPropF) :=
   forall M w, (forall ψ, (In _ Γ ψ) -> wforces M w ψ) -> (wforces M w φ).
-
-Definition glob_conseq (Γ : Ensemble MPropF) (φ : MPropF) :=
-  forall M, (forall ψ, (In _ Γ ψ) -> mforces M ψ) -> (mforces M φ).
