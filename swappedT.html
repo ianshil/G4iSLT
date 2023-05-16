@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>swappedT</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library swappedT</h1>
+
+<div class="code">
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">List</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">existsT</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">gen_tacs</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">gen</span>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">List_lemmasT</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
+<span class="id" title="keyword">Import</span> <span class="id" title="var">ListNotations</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <span class="id" title="var">swapped</span> <span class="id" title="var">T</span>: <span class="id" title="var">list</span> <span class="id" title="var">T</span> -&gt; <span class="id" title="var">list</span> <span class="id" title="var">T</span> -&gt; <span class="id" title="keyword">Type</span> :=<br/>
+| <span class="id" title="var">swapped_I</span> : <span class="id" title="keyword">forall</span> (<span class="id" title="var">X</span> <span class="id" title="var">Y</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">X</span> = (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">D</span>) -&gt; <span class="id" title="var">Y</span> = (<span class="id" title="var">A</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">D</span>) -&gt; <span class="id" title="var">swapped</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_I'</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">D</span>) (<span class="id" title="var">A</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">D</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_I</span> ; <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_same</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">X</span>, <span class="id" title="var">swapped</span> <span class="id" title="var">X</span> (<span class="id" title="var">X</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">apply</span> (<span class="id" title="var">swapped_I</span> [] [] [] <span class="id" title="var">X</span>) ; <span class="id" title="tactic">simpl</span> ; <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_L</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> <span class="id" title="var">Z</span>,<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">X</span> (<span class="id" title="var">Y</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>) -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">Z</span> ++ <span class="id" title="var">X</span>) (<span class="id" title="var">Z</span> ++ <span class="id" title="var">Y</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">X0</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">X0</span>. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> !(<span class="id" title="var">app_assoc</span> <span class="id" title="var">Z</span>). <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_I'</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_R</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> <span class="id" title="var">Z</span>,<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">X</span> (<span class="id" title="var">Y</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>) -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">X</span> ++ <span class="id" title="var">Z</span>) (<span class="id" title="var">Y</span> ++ <span class="id" title="var">Z</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">X0</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">X0</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">rewrite</span> &lt;- !<span class="id" title="var">app_assoc</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_I'</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_cons</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> (<span class="id" title="var">x</span> : <span class="id" title="var">T</span>) <span class="id" title="var">Y</span> <span class="id" title="var">Z</span>,<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">Y</span> <span class="id" title="var">Z</span> -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">x</span> :: <span class="id" title="var">Y</span>) (<span class="id" title="var">x</span> :: <span class="id" title="var">Z</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">subst</span>. <span class="id" title="tactic">repeat</span> <span class="id" title="tactic">rewrite</span> <span class="id" title="var">app_comm_cons</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_I'</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">swapped_single</span> <span class="id" title="var">T</span> (<span class="id" title="var">x</span> : <span class="id" title="var">T</span>) := <span class="id" title="var">swapped_cons</span> <span class="id" title="var">x</span> (<span class="id" title="var">swapped_same</span> []).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_nilLE</span> <span class="id" title="var">T</span> <span class="id" title="var">Y</span>: @<span class="id" title="var">swapped</span> <span class="id" title="var">T</span> [] <span class="id" title="var">Y</span> -&gt; <span class="id" title="var">Y</span> = [].<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intro</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">subst</span>.<br/>
+<span class="id" title="tactic">repeat</span> (<span class="id" title="var">list_eq_ncT</span> ; <span class="id" title="var">cD</span> ; <span class="id" title="tactic">subst</span>) ;<br/>
+<span class="id" title="tactic">simpl</span> ; <span class="id" title="tactic">rewrite</span> ?<span class="id" title="var">app_nil_r</span> ; <span class="id" title="tactic">try</span> <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_nilRE</span> <span class="id" title="var">T</span> <span class="id" title="var">Y</span>: @<span class="id" title="var">swapped</span> <span class="id" title="var">T</span> <span class="id" title="var">Y</span> [] -&gt; <span class="id" title="var">Y</span> = [].<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intro</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">subst</span>.<br/>
+<span class="id" title="tactic">repeat</span> (<span class="id" title="var">list_eq_ncT</span> ; <span class="id" title="var">cD</span> ; <span class="id" title="tactic">subst</span>) ;<br/>
+<span class="id" title="tactic">simpl</span> ; <span class="id" title="tactic">rewrite</span> ?<span class="id" title="var">app_nil_r</span> ; <span class="id" title="tactic">try</span> <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_singleLE</span> <span class="id" title="var">T</span> (<span class="id" title="var">x</span> : <span class="id" title="var">T</span>) <span class="id" title="var">Y</span>: <span class="id" title="var">swapped</span> [<span class="id" title="var">x</span>] <span class="id" title="var">Y</span> -&gt; <span class="id" title="var">Y</span> = [<span class="id" title="var">x</span>].<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intro</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">subst</span>.<br/>
+<span class="id" title="var">acacD'T2</span> ; <span class="id" title="tactic">subst</span> ; <span class="id" title="tactic">repeat</span> (<span class="id" title="var">list_eq_ncT</span> ; <span class="id" title="var">cD</span> ; <span class="id" title="tactic">subst</span>) ;<br/>
+<span class="id" title="tactic">simpl</span> ; <span class="id" title="tactic">rewrite</span> ?<span class="id" title="var">app_nil_r</span> ; <span class="id" title="tactic">try</span> <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_singleRE</span> <span class="id" title="var">T</span> (<span class="id" title="var">x</span> : <span class="id" title="var">T</span>) <span class="id" title="var">Y</span>: <span class="id" title="var">swapped</span> <span class="id" title="var">Y</span> [<span class="id" title="var">x</span>] -&gt; <span class="id" title="var">Y</span> = [<span class="id" title="var">x</span>].<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intro</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">subst</span>.<br/>
+<span class="id" title="var">acacD'T2</span> ; <span class="id" title="tactic">subst</span> ; <span class="id" title="tactic">repeat</span> (<span class="id" title="var">list_eq_ncT</span> ; <span class="id" title="var">cD</span> ; <span class="id" title="tactic">subst</span>) ;<br/>
+<span class="id" title="tactic">simpl</span> ; <span class="id" title="tactic">rewrite</span> ?<span class="id" title="var">app_nil_r</span> ; <span class="id" title="tactic">try</span> <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_simple</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">U</span> <span class="id" title="var">V</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span>,<br/>
+&nbsp;&nbsp;<span class="id" title="var">U</span> = <span class="id" title="var">X</span> ++ <span class="id" title="var">Y</span> -&gt; <span class="id" title="var">V</span> = <span class="id" title="var">Y</span> ++ <span class="id" title="var">X</span> -&gt; <span class="id" title="var">swapped</span> <span class="id" title="var">U</span> (<span class="id" title="var">V</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> (<span class="id" title="var">swapped_I</span> [] <span class="id" title="var">X</span> <span class="id" title="var">Y</span> []) ; <span class="id" title="tactic">simpl</span> ; <span class="id" title="tactic">rewrite</span> <span class="id" title="var">app_nil_r</span> ; <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_simple'</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span>, <span class="id" title="var">swapped</span> (<span class="id" title="var">X</span> ++ <span class="id" title="var">Y</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>) (<span class="id" title="var">Y</span> ++ <span class="id" title="var">X</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_simple</span> ; <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_simpleL</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> <span class="id" title="var">Z</span>,<br/>
+&nbsp;&nbsp;<span class="id" title="var">Y</span> = <span class="id" title="var">Z</span> -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">X</span> ++ <span class="id" title="var">Y</span>) (<span class="id" title="var">Z</span> ++ <span class="id" title="var">X</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_simple'</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_simpleR</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> <span class="id" title="var">Z</span>,<br/>
+&nbsp;&nbsp;<span class="id" title="var">Y</span> = <span class="id" title="var">Z</span> -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">Y</span> ++ <span class="id" title="var">X</span>) (<span class="id" title="var">X</span> ++ <span class="id" title="var">Z</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_simple'</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_comm</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} (<span class="id" title="var">A</span> <span class="id" title="var">B</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">B</span> <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_I'</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">single</span> <span class="id" title="var">X</span> (<span class="id" title="var">a</span> : <span class="id" title="var">X</span>) := [<span class="id" title="var">a</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">cons_app_single</span> <span class="id" title="var">X</span> (<span class="id" title="var">a</span> : <span class="id" title="var">X</span>) <span class="id" title="var">xs</span> : <span class="id" title="var">a</span> :: <span class="id" title="var">xs</span> = <span class="id" title="var">single</span> <span class="id" title="var">a</span> ++ <span class="id" title="var">xs</span>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">single</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">single_eq</span> <span class="id" title="var">X</span> <span class="id" title="var">a</span> : [<span class="id" title="var">a</span> : <span class="id" title="var">X</span>] = <span class="id" title="var">single</span> <span class="id" title="var">a</span>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">single</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_Rc2</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">H</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span>: <br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">C</span> (<span class="id" title="var">H</span> ++ [<span class="id" title="var">A</span> : <span class="id" title="var">T</span>]) -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">C</span> ++ <span class="id" title="var">B</span>) (<span class="id" title="var">H</span> ++ <span class="id" title="var">A</span> :: <span class="id" title="var">B</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_R</span> <span class="id" title="tactic">in</span> <span class="id" title="var">sw</span>. <span class="id" title="var">revert</span> <span class="id" title="var">sw</span>.<br/>
+<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">app_assoc</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">intro</span>. <span class="id" title="var">eassumption</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_Rc1</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">H</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span>: <br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> (<span class="id" title="var">H</span> ++ [<span class="id" title="var">A</span> : <span class="id" title="var">T</span>]) <span class="id" title="var">C</span> -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">H</span> ++ <span class="id" title="var">A</span> :: <span class="id" title="var">B</span>) (<span class="id" title="var">C</span> ++ <span class="id" title="var">B</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_R</span> <span class="id" title="tactic">in</span> <span class="id" title="var">sw</span>. <span class="id" title="var">revert</span> <span class="id" title="var">sw</span>.<br/>
+<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">app_assoc</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">intro</span>. <span class="id" title="var">eassumption</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_ca1</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">H</span>: <span class="id" title="var">swapped</span> (<span class="id" title="var">A</span> :: <span class="id" title="var">H</span>) (<span class="id" title="var">H</span> ++ [<span class="id" title="var">A</span> : <span class="id" title="var">T</span>]).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">pose</span> (<span class="id" title="var">swapped_simple'</span> [<span class="id" title="var">A</span>] <span class="id" title="var">H</span>). <span class="id" title="tactic">simpl</span> <span class="id" title="tactic">in</span> <span class="id" title="var">s</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">s</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_ca2</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">H</span>: <span class="id" title="var">swapped</span> (<span class="id" title="var">H</span> ++ [<span class="id" title="var">A</span> : <span class="id" title="var">T</span>]) (<span class="id" title="var">A</span> :: <span class="id" title="var">H</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">pose</span> (<span class="id" title="var">swapped_simple'</span> <span class="id" title="var">H</span> [<span class="id" title="var">A</span>]). <span class="id" title="tactic">simpl</span> <span class="id" title="tactic">in</span> <span class="id" title="var">s</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">s</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_map_ex</span> <span class="id" title="var">T</span> <span class="id" title="var">U</span> (<span class="id" title="var">f</span> : <span class="id" title="var">T</span> -&gt; <span class="id" title="var">U</span>) <span class="id" title="var">xs</span> <span class="id" title="var">ys</span>:<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> (<span class="id" title="var">map</span> <span class="id" title="var">f</span> <span class="id" title="var">xs</span>) <span class="id" title="var">ys</span> -&gt; <span class="id" title="var">sigT2</span> (<span class="id" title="var">swapped</span> <span class="id" title="var">xs</span>) (<span class="id" title="keyword">fun</span> <span class="id" title="var">zs</span> =&gt; <span class="id" title="var">ys</span> = <span class="id" title="var">map</span> <span class="id" title="var">f</span> <span class="id" title="var">zs</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intro</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">clear</span> <span class="id" title="var">sw</span>.<br/>
+<span class="id" title="tactic">repeat</span> (<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span> | [ <span class="id" title="var">H</span> : <span class="id" title="var">_</span> |- <span class="id" title="var">_</span> ] =&gt; <span class="id" title="tactic">eapply</span> <span class="id" title="var">map_app_ex</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> ; <span class="id" title="var">cD</span> <span class="id" title="keyword">end</span>).<br/>
+<span class="id" title="tactic">subst</span>. <span class="id" title="tactic">eexists</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_I'</span>. <span class="id" title="tactic">rewrite</span> !<span class="id" title="var">map_app</span>. <span class="id" title="tactic">reflexivity</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_map</span> <span class="id" title="var">T</span> <span class="id" title="var">U</span> (<span class="id" title="var">f</span> : <span class="id" title="var">T</span> -&gt; <span class="id" title="var">U</span>) <span class="id" title="var">xs</span> <span class="id" title="var">ys</span>:<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">xs</span> <span class="id" title="var">ys</span> -&gt; <span class="id" title="var">swapped</span> (<span class="id" title="var">map</span> <span class="id" title="var">f</span> <span class="id" title="var">xs</span>) (<span class="id" title="var">map</span> <span class="id" title="var">f</span> <span class="id" title="var">ys</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intro</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">sw</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">clear</span> <span class="id" title="var">sw</span>.<br/>
+<span class="id" title="tactic">rewrite</span> !<span class="id" title="var">map_app</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_I'</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <span class="id" title="var">swapped_spec</span> {<span class="id" title="var">T</span>} : <span class="id" title="var">nat</span> -&gt; <span class="id" title="var">list</span> <span class="id" title="var">T</span> -&gt; <span class="id" title="var">list</span> <span class="id" title="var">T</span> -&gt; <span class="id" title="keyword">Type</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped_spec_I</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> : <span class="id" title="var">swapped</span> <span class="id" title="var">X</span> <span class="id" title="var">Y</span> -&gt; <span class="id" title="var">swapped_spec</span> 0 <span class="id" title="var">X</span> <span class="id" title="var">Y</span><br/>
+| <span class="id" title="var">swapped_spec_step</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> :<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt; <span class="id" title="var">swapped</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> -&gt; <span class="id" title="var">swapped_spec</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>) <span class="id" title="var">A</span> <span class="id" title="var">C</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_refl</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">A</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">econstructor</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_same</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">econstructor</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">IHn</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_same</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_app_L</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">l</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> (<span class="id" title="var">l</span> ++ <span class="id" title="var">A</span>) (<span class="id" title="var">l</span> ++ <span class="id" title="var">B</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">Hswap</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_L</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">Hswap</span>. <span class="id" title="tactic">auto</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">Hswap</span> <span class="id" title="keyword">as</span> [ | ? ? ? ? <span class="id" title="var">X</span> <span class="id" title="var">X0</span>]. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">econstructor</span>. <span class="id" title="tactic">eapply</span> <span class="id" title="var">IHn</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">X</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_L</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_trans</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n1</span> <span class="id" title="var">n2</span> (<span class="id" title="var">l1</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n1</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n2</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">existsT2</span> <span class="id" title="var">m</span>, <span class="id" title="var">swapped_spec</span> <span class="id" title="var">m</span> <span class="id" title="var">l1</span> <span class="id" title="var">l3</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">n2</span>; <span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">exists</span> (<span class="id" title="var">S</span> <span class="id" title="var">n1</span>).<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">econstructor</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H2</span> <span class="id" title="keyword">as</span> [ | ? ? ? ? <span class="id" title="var">X</span> <span class="id" title="var">X0</span>]. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">IHn2</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">H1</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">m</span> <span class="id" title="var">H1</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">exists</span> (<span class="id" title="var">S</span> <span class="id" title="var">m</span>). <span class="id" title="tactic">econstructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">X0</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">X</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_trans_exact</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n1</span> <span class="id" title="var">n2</span> (<span class="id" title="var">l1</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n1</span> <span class="id" title="var">l1</span> <span class="id" title="var">l2</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n2</span> <span class="id" title="var">l2</span> <span class="id" title="var">l3</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> (<span class="id" title="var">S</span> (<span class="id" title="var">n1</span> + <span class="id" title="var">n2</span>)) <span class="id" title="var">l1</span> <span class="id" title="var">l3</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">n2</span>; <span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H2</span> <span class="id" title="keyword">as</span> [? ?  <span class="id" title="var">X</span> | ]. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">PeanoNat.Nat.add_0_r</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">econstructor</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">X</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H2</span> <span class="id" title="keyword">as</span> [| ? ? ? ? <span class="id" title="var">X</span> <span class="id" title="var">X0</span>]. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">IHn2</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">econstructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">PeanoNat.Nat.add_succ_comm</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">X0</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_comm</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">B</span> <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">n</span>; <span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [? ? <span class="id" title="var">X</span> | ]. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_comm</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [ | ? ? ? ? <span class="id" title="var">X</span> <span class="id" title="var">X0</span>]. <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_comm</span> <span class="id" title="tactic">in</span> <span class="id" title="var">X0</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_I</span> <span class="id" title="tactic">in</span> <span class="id" title="var">X0</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">IHn</span> <span class="id" title="tactic">in</span> <span class="id" title="var">X</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> (@<span class="id" title="var">swapped_spec_trans_exact</span> <span class="id" title="var">T</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">X0</span> <span class="id" title="var">X</span>).<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_conv</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> <span class="id" title="var">m</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;<span class="id" title="var">n</span> = <span class="id" title="var">m</span> -&gt;<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt;<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">m</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span>.<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">auto</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_app_mid_L</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> <span class="id" title="var">E</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">D</span>) <span class="id" title="var">E</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>) (<span class="id" title="var">A</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">D</span>) <span class="id" title="var">E</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">Hswap</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">assert</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span> = <span class="id" title="var">S</span> (0 + <span class="id" title="var">n</span>)) <span class="id" title="keyword">as</span> <span class="id" title="var">Hass</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_conv</span>. <span class="id" title="tactic">symmetry</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Hass</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_trans_exact</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_I'</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">Hswap</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_app_mid_R</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> <span class="id" title="var">E</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">E</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">D</span>) -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>) <span class="id" title="var">E</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">D</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_comm</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_comm</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_mid_L</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_front_mid</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">B</span> (<span class="id" title="var">C</span> ++ <span class="id" title="var">D</span>) -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">existsT2</span> <span class="id" title="var">m</span>, <span class="id" title="var">swapped_spec</span> <span class="id" title="var">m</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span>) (<span class="id" title="var">C</span> ++ <span class="id" title="var">A</span> ++ <span class="id" title="var">D</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">T</span> <span class="id" title="var">n</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> <span class="id" title="var">Hswap</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_L</span> <span class="id" title="tactic">in</span> <span class="id" title="var">Hswap</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_trans</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">Hswap</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">app_nil_l</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_mid_R</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_spec_refl</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="var">Unshelve</span>. <span class="id" title="tactic">apply</span> 0.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped__n_mid</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">m</span> (<span class="id" title="var">l</span> <span class="id" title="var">Gam1</span> <span class="id" title="var">Gam2</span> <span class="id" title="var">Gam1'</span> <span class="id" title="var">Gam2'</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">m</span> (<span class="id" title="var">Gam1</span> ++ <span class="id" title="var">Gam2</span>) (<span class="id" title="var">Gam1'</span> ++ <span class="id" title="var">Gam2'</span>) -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">existsT2</span> <span class="id" title="var">n</span>, <span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> (<span class="id" title="var">Gam1</span> ++ <span class="id" title="var">l</span> ++ <span class="id" title="var">Gam2</span>) (<span class="id" title="var">Gam1'</span> ++ <span class="id" title="var">l</span> ++ <span class="id" title="var">Gam2'</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_L</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">app_nil_l</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eexists</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">replace</span> (<span class="id" title="var">Gam1</span> ++ <span class="id" title="var">l</span> ++ <span class="id" title="var">Gam2</span>) <span class="id" title="keyword">with</span> (<span class="id" title="var">nil</span> ++ <span class="id" title="var">Gam1</span> ++ <span class="id" title="var">l</span> ++ <span class="id" title="var">Gam2</span>).<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">replace</span> (<span class="id" title="var">Gam1'</span> ++ <span class="id" title="var">l</span> ++ <span class="id" title="var">Gam2'</span>) <span class="id" title="keyword">with</span> (<span class="id" title="var">nil</span> ++ <span class="id" title="var">Gam1'</span> ++ <span class="id" title="var">l</span> ++ <span class="id" title="var">Gam2'</span>).<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_mid_R</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_mid_L</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">H</span>. <span class="id" title="var">all</span> : <span class="id" title="tactic">reflexivity</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Inductive</span> <span class="id" title="var">swapped_gen</span> {<span class="id" title="var">T</span>} <span class="id" title="var">Gam</span> <span class="id" title="var">Delt</span>  :=<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped_gen_I</span> : (<span class="id" title="var">existsT2</span> <span class="id" title="var">n</span>, @<span class="id" title="var">swapped_spec</span> <span class="id" title="var">T</span> <span class="id" title="var">n</span> <span class="id" title="var">Gam</span> <span class="id" title="var">Delt</span>) -&gt; <span class="id" title="var">swapped_gen</span> <span class="id" title="var">Gam</span> <span class="id" title="var">Delt</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_gen_front_mid</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} (<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_gen</span> <span class="id" title="var">B</span> (<span class="id" title="var">C</span> ++ <span class="id" title="var">D</span>) -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_gen</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span>) (<span class="id" title="var">C</span> ++ <span class="id" title="var">A</span> ++ <span class="id" title="var">D</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span> <span class="id" title="var">Hswap</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">Hswap</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">Hs</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">Hs</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">n</span> <span class="id" title="var">Hs</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_front_mid</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">Hs</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_spec_opp</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} <span class="id" title="var">n</span> (<span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> <span class="id" title="var">n</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_spec</span> (<span class="id" title="var">S</span> <span class="id" title="var">n</span>) <span class="id" title="var">A</span> <span class="id" title="var">C</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="tactic">until</span> 0; <span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_I</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H2</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_spec_trans_exact</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H1</span>.<br/>
+&nbsp;&nbsp;2 : <span class="id" title="tactic">eapply</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">auto</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped__gen</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} (<span class="id" title="var">A</span> <span class="id" title="var">B</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;<span class="id" title="var">swapped</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt; <span class="id" title="var">swapped_gen</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">exists</span> 0. <span class="id" title="tactic">constructor</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">H</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_gen_app_L</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} (<span class="id" title="var">l</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_gen</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> -&gt;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_gen</span> (<span class="id" title="var">l</span> ++ <span class="id" title="var">A</span>) (<span class="id" title="var">l</span> ++ <span class="id" title="var">B</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">T</span> <span class="id" title="var">l</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">H2</span>].<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">destruct</span> <span class="id" title="var">H2</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">n</span> <span class="id" title="var">H2</span>]. <span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">eapply</span> <span class="id" title="var">swapped_app_L</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">exists</span> <span class="id" title="var">n</span>. <span class="id" title="tactic">exact</span> <span class="id" title="var">H2</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">swapped_gen_refl</span> : <span class="id" title="keyword">forall</span> {<span class="id" title="var">T</span>} (<span class="id" title="var">A</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>),<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">swapped_gen</span> <span class="id" title="var">A</span> <span class="id" title="var">A</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span>. <span class="id" title="tactic">constructor</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">exists</span> 0. <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_spec_refl</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">show_swapped_1</span> := <br/>
+&nbsp;&nbsp;<span class="id" title="var">list_assoc_r'</span> ;<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">eapply</span> <span class="id" title="var">arg_cong_imp</span> ; [&gt; <span class="id" title="var">list_assoc_l'</span> ; <span class="id" title="tactic">reflexivity</span> | ] ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_simpleL</span> ; <span class="id" title="var">list_eq_assoc</span>) ;<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">eapply</span> <span class="id" title="var">arg1_cong_imp</span> ; [&gt; <span class="id" title="var">list_assoc_l'</span> ; <span class="id" title="tactic">reflexivity</span> | ] ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_simpleR</span> ; <span class="id" title="var">list_eq_assoc</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">show_swapped_1_ns</span> := <br/>
+&nbsp;&nbsp;<span class="id" title="var">list_assoc_r</span> ; <br/>
+&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">eapply</span> <span class="id" title="var">arg_cong_imp</span> ; [&gt; <span class="id" title="var">list_assoc_l'</span> ; <span class="id" title="tactic">reflexivity</span> | ] ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_simpleL</span> ; <span class="id" title="var">list_eq_assoc</span>) ;<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">try</span> (<span class="id" title="tactic">eapply</span> <span class="id" title="var">arg1_cong_imp</span> ; [&gt; <span class="id" title="var">list_assoc_l'</span> ; <span class="id" title="tactic">reflexivity</span> | ] ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_simpleR</span> ; <span class="id" title="var">list_eq_assoc</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">swap_tac_Rc</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="var">list_assoc_r</span> ; <span class="id" title="tactic">try</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_same</span>) ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_L</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_cons</span>) ;  <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">list_assoc_l</span> ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_R</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_Rc1</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_Rc2</span>) ;<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;(<span class="id" title="var">show_swapped_1</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_ca2</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_ca1</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">swap_tac</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="var">list_assoc_r</span> ; <span class="id" title="tactic">try</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_same</span>) ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_L</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_cons</span>) ;  <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">list_assoc_l</span> ; <span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_R</span>) ; <span class="id" title="var">show_swapped_1</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">swap_tac_ns</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="var">list_assoc_r</span> ; <span class="id" title="tactic">try</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_same</span>) ; <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_L</span> || <span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_cons</span>) ;  <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">list_assoc_l</span> ; <span class="id" title="tactic">repeat</span> (<span class="id" title="tactic">apply</span> <span class="id" title="var">swapped_R</span>) ; <span class="id" title="var">show_swapped_1_ns</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span>, <span class="id" title="var">swapped</span> (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">D</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>) (<span class="id" title="var">D</span> ++ <span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="var">show_swapped_1</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Goal</span> <span class="id" title="keyword">forall</span> <span class="id" title="var">T</span> <span class="id" title="var">A</span> <span class="id" title="var">B</span> <span class="id" title="var">C</span> <span class="id" title="var">D</span>, <span class="id" title="var">swapped</span> (<span class="id" title="var">D</span> ++ <span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span>) (<span class="id" title="var">A</span> ++ <span class="id" title="var">B</span> ++ <span class="id" title="var">C</span> ++ <span class="id" title="var">D</span> : <span class="id" title="var">list</span> <span class="id" title="var">T</span>).<br/>
+<span class="id" title="keyword">Proof</span>. <span class="id" title="tactic">intros</span>. <span class="id" title="var">show_swapped_1</span>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
